@@ -13,8 +13,18 @@ export async function signInWithGoogle() {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
     console.log('User Info:', userInfo);
-    // Handle the user info as needed
+    return userInfo; // Return the userInfo object here
   } catch (error) {
     console.error('Google Sign-In Error', error);
+    return null; // Return null in case of error
+  }
+}
+
+export async function signOut() {
+  try {
+    await GoogleSignin.revokeAccess(); // Optional: remove access
+    await GoogleSignin.signOut();
+  } catch (error) {
+    console.error('Google Sign-Out Error', error);
   }
 }

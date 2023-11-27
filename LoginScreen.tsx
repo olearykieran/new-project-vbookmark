@@ -1,30 +1,46 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {Image} from 'react-native';
-import {signInWithGoogle} from './AuthService';
+import {signInWithGoogle, signOut} from './AuthService';
 
 const LoginScreen = () => {
+  const [user, setUser] = useState(null);
   // In your component
   const handleGoogleLogin = async () => {
-    try {
-      await signInWithGoogle();
+    const userInfo = await signInWithGoogle();
+    if (userInfo) {
       console.log('Google Sign-In Successful');
-      // Navigate or update state as needed
-    } catch (error) {
-      console.error('Google Sign-In Error', error);
+      setUser(userInfo.user); // Update this line to setUser(userInfo.user)
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      await signOut(); // Implement this function to sign out from Google
+      setUser(null); // Clear the user info from state
+    } catch (error) {
+      console.error('Sign-Out Error', error);
+    }
+  };
   return (
     <LinearGradient colors={['#000000', '#333333']} style={styles.container}>
       <Image source={require('./images/vbtitle.png')} style={styles.logo} />
-      <View style={styles.headerContainer}>
-        <Text style={styles.title}>Login</Text>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
-        <Text style={styles.buttonText}>Sign In with Google</Text>
-      </TouchableOpacity>
+      {user ? (
+        <View>
+          <Text style={styles.title}>Logged in as {user.email}</Text>
+          <TouchableOpacity style={styles.button} onPress={handleSignOut}>
+            <Text style={styles.buttonText}>Sign Out</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.headerContainer}>
+          <Text style={styles.title}>Login</Text>
+          <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
+            <Text style={styles.buttonText}>Sign In with Google</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </LinearGradient>
   );
 };
