@@ -1,24 +1,10 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient'; // You might need to install this package
+import React from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {Image} from 'react-native';
 import {signInWithGoogle} from './AuthService';
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleLogin = () => {
-    console.log('Login pressed with Email:', email, 'Password:', password);
-    // Add your login logic here
-  };
-
   // In your component
   const handleGoogleLogin = async () => {
     try {
@@ -36,23 +22,6 @@ const LoginScreen = () => {
       <View style={styles.headerContainer}>
         <Text style={styles.title}>Login</Text>
       </View>
-      <TextInput
-        style={styles.input}
-        onChangeText={setEmail}
-        value={email}
-        placeholder="Email"
-        placeholderTextColor="#f0f0f0"
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={setPassword}
-        value={password}
-        placeholder="Password"
-        placeholderTextColor="#f0f0f0"
-        secureTextEntry
-      />
       <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
         <Text style={styles.buttonText}>Sign In with Google</Text>
       </TouchableOpacity>
