@@ -10,7 +10,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import {Image} from 'react-native';
 import {signInWithGoogle, signOut} from './AuthService';
-import {getBookmarks, addBookmark} from './FirebaseService.js';
+import {getBookmarks, addBookmark, deleteBookmark} from './FirebaseService.js';
 import {Linking} from 'react-native';
 
 const LoginScreen = () => {
@@ -103,30 +103,30 @@ const LoginScreen = () => {
             <TouchableOpacity style={styles.button} onPress={handleSignOut}>
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
-            <Text style={styles.bookmarksHeader}>Bookmarks</Text>
-            {/* Add this line */}
-            {/* Add logic to display bookmarks below */}
-            {bookmarks.map((bookmark, index) => (
-              <View key={bookmark.id} style={styles.bookmarkContainer}>
-                <TouchableOpacity onPress={() => handleOpenLink(bookmark.url)}>
-                  <Text style={styles.bookmarkTitle}>{bookmark.title}</Text>
-                </TouchableOpacity>
-                <Image
-                  source={{uri: bookmark.thumbnail}}
-                  style={styles.thumbnail}
-                />
-                <Text style={styles.bookmarkNumber}>{index + 1}</Text>
-                {/* Number the bookmarks */}
-                <Text style={styles.bookmarkTime}>
-                  {secondsToHMS(bookmark.time)}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => handleDeleteBookmark(bookmark.id)}
-                  style={styles.deleteButton}>
-                  <Text style={styles.deleteButtonText}>Delete</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+            <View style={styles.bookmarkListHeader}>
+              <Text style={styles.bookmarksHeader}>Bookmarks</Text>
+              {bookmarks.map((bookmark, index) => (
+                <View key={bookmark.id} style={styles.bookmarkContainer}>
+                  <TouchableOpacity
+                    onPress={() => handleOpenLink(bookmark.url)}>
+                    <Text style={styles.bookmarkTitle}>{bookmark.title}</Text>
+                  </TouchableOpacity>
+                  <Image
+                    source={{uri: bookmark.thumbnail}}
+                    style={styles.thumbnail}
+                  />
+                  <Text style={styles.bookmarkNumber}>{index + 1}</Text>
+                  <Text style={styles.bookmarkTime}>
+                    {secondsToHMS(bookmark.time)}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => handleDeleteBookmark(bookmark.id)}
+                    style={styles.deleteButton}>
+                    <Text style={styles.deleteButtonText}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
           </View>
         ) : (
           <View style={styles.headerContainer}>
@@ -189,11 +189,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   bookmarkContainer: {
-    backgroundColor: '#222222',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)', // 50% transparent white
     borderRadius: 5,
-    padding: 10,
+    padding: 20,
     marginVertical: 5,
     textAlign: 'center',
+    alignItems: 'center',
+    marginBottom: 50,
   },
   bookmarkTitle: {
     color: '#f0f0f0',
@@ -228,6 +230,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 36,
     fontWeight: 'bold',
+  },
+  thumbnail: {
+    width: 100, // set a specific width
+    height: 100, // set a specific height
+    resizeMode: 'contain', // or 'cover' depending on what you need
+    alignSelf: 'center',
   },
 });
 

@@ -7,6 +7,8 @@ import {
   where,
   getDocs,
   limit,
+  doc,
+  deleteDoc,
 } from 'firebase/firestore';
 
 const db = getFirestore(app);
@@ -39,4 +41,10 @@ export const getBookmarks = async userID => {
     console.error('Error fetching bookmarks:', error);
     throw error;
   }
+};
+
+export const deleteBookmark = async bookmarkId => {
+  const db = getFirestore(app);
+  const bookmarkRef = doc(db, 'Bookmarks', bookmarkId);
+  await deleteDoc(bookmarkRef);
 };
