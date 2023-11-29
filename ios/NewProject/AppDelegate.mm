@@ -2,8 +2,10 @@
 
 #import <React/RCTBundleURLProvider.h>
 
-@implementation AppDelegate
 
+
+@implementation AppDelegate
+  
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"NewProject";

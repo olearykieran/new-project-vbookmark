@@ -1,5 +1,7 @@
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {NativeModules} from 'react-native';
+const {UserDefaultsManager} = NativeModules;
 
 GoogleSignin.configure({
   /* webClientId:
@@ -13,6 +15,15 @@ export async function signInWithGoogle() {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
     console.log('User Info:', userInfo);
+    // Save the user ID right after signing in
+    await AsyncStorage.setItem('userID', userInfo.user.id);
+    UserDefaultsManager.saveUserID(userInfo.user.id)
+      .then(() => {
+        console.log('UserID saved successfully.');
+      })
+      .catch(error => {
+        console.error('Failed to save UserID', error);
+      });
     return userInfo; // Return the userInfo object here
   } catch (error) {
     console.error('Google Sign-In Error', error);
