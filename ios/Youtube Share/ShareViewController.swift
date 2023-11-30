@@ -4,9 +4,22 @@ import MobileCoreServices
 import UniformTypeIdentifiers
 import Firebase
 
-class ShareViewController: SLComposeServiceViewController {
+class ShareViewController: UIViewController {
+  
+  
 
-    override func didSelectPost() {
+
+  // This function is called when the Post button is pressed
+      @IBAction func postButtonPressed(_ sender: UIButton) {
+          didSelectPost()
+      }
+
+      // This function is called when the Cancel button is pressed
+      @IBAction func cancelButtonPressed(_ sender: UIButton) {
+          extensionContext?.cancelRequest(withError: NSError())
+      }
+
+    func didSelectPost() {
         // This is called after the user selects Post. Do the upload of content here.
         FirebaseApp.configure()
         if let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem {
@@ -15,8 +28,10 @@ class ShareViewController: SLComposeServiceViewController {
                     if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
                         itemProvider.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil, completionHandler: { (item, error) in
                             if let url = item as? URL {
-                                // Here, handle the URL and perform necessary actions like saving to Firebase
+                                print("URL received: \(url)")
                                 self.saveBookmarkToFirebase(url: url)
+                            } else if let error = error {
+                                print("Error loading item: \(error)")
                             }
                         })
                     }
