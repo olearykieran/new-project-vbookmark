@@ -6,16 +6,24 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Image,
+  Linking,
+  RefreshControl,
+  Alert, // Import Alert here
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Image} from 'react-native';
 import {signInWithGoogle, signOut} from './AuthService';
 import {getBookmarks, addBookmark, deleteBookmark} from './FirebaseService.js';
-import {Linking} from 'react-native';
 
 const LoginScreen = () => {
   const [user, setUser] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Function to show an alert
+  const showAlert = (title, message) => {
+    Alert.alert(title, message, [{text: 'OK'}], {cancelable: true});
+  };
 
   // In your component
   const handleGoogleLogin = async () => {
@@ -39,26 +47,32 @@ const LoginScreen = () => {
     const fetchBookmarks = async () => {
       if (user) {
         try {
+          console.log('Fetching bookmarks for user:', user.id);
           const bookmarks = await getBookmarks(user.id);
           const updatedBookmarks = [];
 
           for (const bookmark of bookmarks) {
-            // Check the "source" field to determine the source of the bookmark
+            console.log('Processing bookmark:', bookmark);
+
             if (bookmark.source === 'iOS') {
-              // Append the timestamp as needed for iOS bookmarks
-              // Assuming you want to append it as a query parameter
-              const timestamp = bookmark.created.toDate().getTime();
-              const urlWithTimestamp = `${bookmark.url}?timestamp=${timestamp}`;
+              // Convert time from milliseconds to seconds and round down
+              const videoTimestampInSeconds = Math.floor(bookmark.time);
+
+              // Check if URL already has query parameters and append 't' parameter
+              const separator = bookmark.url.includes('?') ? '&' : '?';
+              const urlWithTimestamp = `${bookmark.url}${separator}t=${videoTimestampInSeconds}s`;
+
+              console.log('Updated URL with timestamp:', urlWithTimestamp);
 
               // Create a new bookmark object with the updated URL
               const updatedBookmark = {...bookmark, url: urlWithTimestamp};
               updatedBookmarks.push(updatedBookmark);
             } else {
-              // For non-iOS bookmarks, keep them as is
               updatedBookmarks.push(bookmark);
             }
           }
 
+          console.log('Updated bookmarks:', updatedBookmarks);
           setBookmarks(updatedBookmarks);
         } catch (error) {
           console.error('Error fetching bookmarks:', error);
@@ -67,6 +81,44 @@ const LoginScreen = () => {
     };
 
     fetchBookmarks();
+  }, [user]);
+
+  const refreshBookmarks = async () => {
+    if (user) {
+      setRefreshing(true); // Start refreshing
+      try {
+        console.log('Refreshing bookmarks for user:', user.id);
+        const newBookmarks = await getBookmarks(user.id);
+        const updatedBookmarks = [];
+
+        for (const bookmark of newBookmarks) {
+          console.log('Processing bookmark:', bookmark);
+
+          if (bookmark.source === 'iOS') {
+            const videoTimestampInSeconds = Math.floor(bookmark.time);
+            const separator = bookmark.url.includes('?') ? '&' : '?';
+            const urlWithTimestamp = `${bookmark.url}${separator}t=${videoTimestampInSeconds}s`;
+
+            console.log('Updated URL with timestamp:', urlWithTimestamp);
+            const updatedBookmark = {...bookmark, url: urlWithTimestamp};
+            updatedBookmarks.push(updatedBookmark);
+          } else {
+            updatedBookmarks.push(bookmark);
+          }
+        }
+
+        console.log('Refreshed bookmarks:', updatedBookmarks);
+        setBookmarks(updatedBookmarks); // Update state with new bookmarks
+      } catch (error) {
+        console.error('Error refreshing bookmarks:', error);
+      }
+      setRefreshing(false); // Stop refreshing
+    }
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    refreshBookmarks().finally(() => setRefreshing(false));
   }, [user]);
 
   // Add a function to handle adding a new bookmark
@@ -84,10 +136,12 @@ const LoginScreen = () => {
 
   const handleDeleteBookmark = async bookmarkId => {
     try {
-      await deleteBookmark(bookmarkId); // Implement this function to delete from Firestore
+      await deleteBookmark(bookmarkId);
       setBookmarks(bookmarks.filter(bookmark => bookmark.id !== bookmarkId));
+      showAlert('Deleted', 'Bookmark deleted successfully.'); // Show alert on successful delete
     } catch (error) {
       console.error('Error deleting bookmark:', error);
+      showAlert('Error', 'Failed to delete bookmark.'); // Show alert on error
     }
   };
 
@@ -107,8 +161,11 @@ const LoginScreen = () => {
 
   return (
     <LinearGradient colors={['#000000', '#333333']} style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        {/* Wrap content in ScrollView */}
+      <ScrollView
+        style={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <Image source={require('./images/vbtitle.png')} style={styles.logo} />
         {user ? (
           <View>

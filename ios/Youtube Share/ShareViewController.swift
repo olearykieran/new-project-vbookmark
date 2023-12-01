@@ -20,9 +20,21 @@ class ShareViewController: UIViewController {
   
     @IBOutlet weak var hoursTextField: UITextField!
     @IBOutlet weak var minutesTextField: UITextField!
-
+  
+  private func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
+      let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+      alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+          completion?() // Call completion handler when the alert is dismissed
+      })
+      self.present(alert, animated: true, completion: nil)
+  }
+  
     override func viewDidLoad() {
         super.viewDidLoad()
+      
+      // Set default values
+          hoursTextField.text = "0"
+          minutesTextField.text = "0"
 
         // Configure Firebase once when the view loads
         if FirebaseApp.app() == nil {
@@ -36,7 +48,15 @@ class ShareViewController: UIViewController {
         if let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem {
             processSharedContent(extensionItem)
         }
+      
+      // Add tap gesture to dismiss keyboard
+          let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+          view.addGestureRecognizer(tapGesture)
     }
+  
+  @objc private func dismissKeyboard() {
+      view.endEditing(true)
+  }
 
   private func processSharedContent(_ extensionItem: NSExtensionItem) {
       if let itemProviders = extensionItem.attachments {
@@ -126,23 +146,22 @@ class ShareViewController: UIViewController {
         extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
 
-    private func saveBookmarkToFirebase(url: URL) {
-        guard let userDefaults = UserDefaults(suiteName: "group.com.holygrail.bookmark"),
-              let userID = userDefaults.string(forKey: "userID") else {
-            print("UserID not found in UserDefaults")
-            return
-        }
-        print("User ID retrieved: \(userID)")
+  private func saveBookmarkToFirebase(url: URL) {
+      guard let userDefaults = UserDefaults(suiteName: "group.com.holygrail.bookmark"),
+            let userID = userDefaults.string(forKey: "userID") else {
+          print("UserID not found in UserDefaults")
+          return
+      }
+      print("User ID retrieved: \(userID)")
 
-        let videoID = extractYoutubeVideoID(from: url)
-     
+      let videoID = extractYoutubeVideoID(from: url)
+
       fetchYoutubeVideoDetails(videoID: videoID) { [weak self] result in
           guard let self = self else {
-              // Handle the case where self is nil (e.g., ShareViewController has been deallocated)
+              // Handle the case where self is nil
               return
           }
 
-          print("Fetch YouTube Video Details Result: \(result)")
           switch result {
           case .success(let video):
               let thumbnail = "https://img.youtube.com/vi/\(videoID)/0.jpg"
@@ -150,33 +169,46 @@ class ShareViewController: UIViewController {
                   "created": Timestamp(date: Date()),
                   "thumbnail": thumbnail,
                   "time": Double(self.timeInSeconds),
-                  "title": video.title, // Using fetched title
+                  "title": video.title,
                   "url": url.absoluteString,
                   "userID": userID,
-                  "source": "iOS" // Specify the source as "iOS"
+                  "source": "iOS"
               ]
-              self.saveToFirebase(data: bookmarkData) {
-                  self.didSelectPost()
-              }
+            self.saveToFirebase(data: bookmarkData) { success, errorMessage in
+                DispatchQueue.main.async {
+                    if success {
+                        print("Showing success alert.")
+                        self.showAlert(title: "Success", message: "Bookmark saved successfully") {
+                            self.didSelectPost()
+                        }
+                    } else if let errorMessage = errorMessage {
+                        print("Showing error alert.")
+                        self.showAlert(title: "Error", message: errorMessage)
+                    }
+                }
+            }
+
           case .failure(let error):
               print("Error fetching video details: \(error)")
-              self.didSelectPost()
+              // Handle error, show an error message or handle as appropriate
+              self.showAlert(title: "Error", message: error.localizedDescription)
           }
       }
-    }
+  }
 
-    private func saveToFirebase(data: [String: Any], completion: @escaping () -> Void) {
-        print("Entering saveToFirebase with data: \(data)")
-        let bookmarksCollectionRef = Firestore.firestore().collection("Bookmarks")
-        bookmarksCollectionRef.addDocument(data: data) { error in
-            if let error = error {
-                print("Error saving bookmark: \(error)")
-            } else {
-                print("Bookmark saved successfully")
-            }
-            completion()
-        }
-    }
+  private func saveToFirebase(data: [String: Any], completion: @escaping (Bool, String?) -> Void) {
+      print("Entering saveToFirebase with data: \(data)")
+      let bookmarksCollectionRef = Firestore.firestore().collection("Bookmarks")
+      bookmarksCollectionRef.addDocument(data: data) { error in
+          if let error = error {
+              print("Error saving bookmark: \(error)")
+              completion(false, error.localizedDescription)
+          } else {
+              print("Bookmark saved successfully")
+              completion(true, nil)
+          }
+      }
+  }
   private func fetchYoutubeVideoDetails(videoID: String, completion: @escaping (Result<YoutubeVideo, Error>) -> Void) {
       print("Starting to fetch video details for ID: \(videoID)")
       let url = "https://www.googleapis.com/youtube/v3/videos?id=\(videoID)&key=\(apiKey)&part=snippet,contentDetails"
