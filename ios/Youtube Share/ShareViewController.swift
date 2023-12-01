@@ -15,6 +15,11 @@ class ShareViewController: UIViewController {
     var sharedURL: URL?
   
     let apiKey = ProcessInfo.processInfo.environment["YOUTUBE_API_KEY"] ?? ""
+  
+    var timeInSeconds: Int = 0
+  
+    @IBOutlet weak var hoursTextField: UITextField!
+    @IBOutlet weak var minutesTextField: UITextField!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,8 +67,6 @@ class ShareViewController: UIViewController {
       if let url = extractURL(from: text) {
           print("Extracted URL: \(url)")
           sharedURL = url
-          extractAndStoreTimestamp(from: url)
-          // Further processing as needed
       } else {
           print("No URL found in plain text")
       }
@@ -74,39 +77,45 @@ class ShareViewController: UIViewController {
       // This can be enhanced based on the expected format of the text
       return URL(string: text.trimmingCharacters(in: .whitespacesAndNewlines))
   }
+  
 
-  private func extractAndStoreTimestamp(from url: URL) {
-      let queryItems = URLComponents(string: url.absoluteString)?.queryItems
-      let timeParameter = queryItems?.first(where: { $0.name == "t" })?.value
 
-      // Convert the time parameter to seconds
-      let timeInSeconds = convertYouTubeTimeParameterToSeconds(timeParameter)
-      print("Extracted Timestamp: \(timeInSeconds) seconds")
-      // Store the timestamp for later use
-      // ...
-  }
 
-  private func convertYouTubeTimeParameterToSeconds(_ timeParameter: String?) -> Int {
-      guard let time = timeParameter else { return 0 }
+  @IBAction func postButtonPressed(_ sender: UIButton) {
+      if let url = sharedURL,
+         let hoursText = hoursTextField.text,
+         let minutesText = minutesTextField.text,
+         validateTimeInput(hoursText, minutesText) {
 
-      let timeComponents = time.components(separatedBy: CharacterSet.decimalDigits.inverted)
-      let timeNumbers = timeComponents.compactMap { Int($0) }
+          // Convert hours and minutes input to seconds
+        timeInSeconds = convertTimeToSeconds(hoursText, minutesText)
 
-      switch timeNumbers.count {
-      case 1: // Only seconds
-          return timeNumbers[0]
-      case 2: // Minutes and seconds
-          return timeNumbers[0] * 60 + timeNumbers[1]
-      default:
-          return 0
+          saveBookmarkToFirebase(url: url)
       }
   }
+  
+  func validateTimeInput(_ hours: String, _ minutes: String) -> Bool {
+      // Check if hours and minutes are valid integers
+      if let hoursValue = Int(hours), let minutesValue = Int(minutes),
+         hoursValue >= 0, minutesValue >= 0 {
+          return true
+      }
+      // Handle invalid input (show an alert, error message, etc.)
+      return false
+  }
 
-    @IBAction func postButtonPressed(_ sender: UIButton) {
-        if let url = sharedURL {
-            saveBookmarkToFirebase(url: url)
-        }
-    }
+
+  func convertTimeToSeconds(_ hours: String, _ minutes: String) -> Int {
+      // Parse hours and minutes from input
+      if let hoursValue = Int(hours), let minutesValue = Int(minutes) {
+          // Calculate total time in seconds
+          let totalSeconds = (hoursValue * 3600) + (minutesValue * 60)
+          return totalSeconds
+      }
+      // Return 0 if parsing fails
+      return 0
+  }
+
 
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         let error = NSError(domain: "com.holygrail.YoutubeShareExtensionError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "User cancelled the action"])
@@ -126,27 +135,34 @@ class ShareViewController: UIViewController {
         print("User ID retrieved: \(userID)")
 
         let videoID = extractYoutubeVideoID(from: url)
-        fetchYoutubeVideoDetails(videoID: videoID) { [weak self] result in
-            print("Fetch YouTube Video Details Result: \(result)")
-            switch result {
-            case .success(let video):
-                let thumbnail = "https://img.youtube.com/vi/\(videoID)/0.jpg"
-                let bookmarkData: [String: Any] = [
-                    "created": Timestamp(date: Date()),
-                    "thumbnail": thumbnail,
-                    "time": 0.0, // Replace with actual time if available
-                    "title": video.title, // Using fetched title
-                    "url": url.absoluteString,
-                    "userID": userID
-                ]
-                self?.saveToFirebase(data: bookmarkData) {
-                                self?.didSelectPost()
-                            }
-            case .failure(let error):
-                print("Error fetching video details: \(error)")
-                self?.didSelectPost()
-            }
-        }
+     
+      fetchYoutubeVideoDetails(videoID: videoID) { [weak self] result in
+          guard let self = self else {
+              // Handle the case where self is nil (e.g., ShareViewController has been deallocated)
+              return
+          }
+
+          print("Fetch YouTube Video Details Result: \(result)")
+          switch result {
+          case .success(let video):
+              let thumbnail = "https://img.youtube.com/vi/\(videoID)/0.jpg"
+              let bookmarkData: [String: Any] = [
+                  "created": Timestamp(date: Date()),
+                  "thumbnail": thumbnail,
+                  "time": Double(self.timeInSeconds),
+                  "title": video.title, // Using fetched title
+                  "url": url.absoluteString,
+                  "userID": userID,
+                  "source": "iOS" // Specify the source as "iOS"
+              ]
+              self.saveToFirebase(data: bookmarkData) {
+                  self.didSelectPost()
+              }
+          case .failure(let error):
+              print("Error fetching video details: \(error)")
+              self.didSelectPost()
+          }
+      }
     }
 
     private func saveToFirebase(data: [String: Any], completion: @escaping () -> Void) {

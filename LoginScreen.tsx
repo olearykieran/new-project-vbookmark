@@ -40,13 +40,26 @@ const LoginScreen = () => {
       if (user) {
         try {
           const bookmarks = await getBookmarks(user.id);
-          setBookmarks(bookmarks);
-          bookmarks.forEach(bookmark => {
-            console.log({
-              ...bookmark,
-              created: bookmark.created.toDate().toString(),
-            });
-          });
+          const updatedBookmarks = [];
+
+          for (const bookmark of bookmarks) {
+            // Check the "source" field to determine the source of the bookmark
+            if (bookmark.source === 'iOS') {
+              // Append the timestamp as needed for iOS bookmarks
+              // Assuming you want to append it as a query parameter
+              const timestamp = bookmark.created.toDate().getTime();
+              const urlWithTimestamp = `${bookmark.url}?timestamp=${timestamp}`;
+
+              // Create a new bookmark object with the updated URL
+              const updatedBookmark = {...bookmark, url: urlWithTimestamp};
+              updatedBookmarks.push(updatedBookmark);
+            } else {
+              // For non-iOS bookmarks, keep them as is
+              updatedBookmarks.push(bookmark);
+            }
+          }
+
+          setBookmarks(updatedBookmarks);
         } catch (error) {
           console.error('Error fetching bookmarks:', error);
         }
