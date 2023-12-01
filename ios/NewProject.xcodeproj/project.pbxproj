@@ -20,8 +20,11 @@
 		893E55082B16B47F008B0A5F /* UserDefaultsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 893E55062B16B47F008B0A5F /* UserDefaultsManager.m */; };
 		893E55092B16B47F008B0A5F /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893E55072B16B47F008B0A5F /* UserDefaultsManager.swift */; };
 		8961ADF52B162E220064F0F8 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8961ADF42B162E220064F0F8 /* ShareViewController.swift */; };
-		8961ADF82B162E220064F0F8 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8961ADF62B162E220064F0F8 /* MainInterface.storyboard */; };
+		8961ADF82B162E220064F0F8 /* MyStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8961ADF62B162E220064F0F8 /* MyStoryboard.storyboard */; };
 		8961ADFC2B162E220064F0F8 /* Youtube Share.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8961ADF22B162E220064F0F8 /* Youtube Share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8992B2692B18B17400CAD124 /* 120icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8908EB352B1828C200299E5C /* 120icon.png */; };
+		8992B26B2B18CAB400CAD124 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 8992B26A2B18CAB400CAD124 /* FirebaseFirestore */; };
+		89A00DA32B19764400018A9F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 89A00DA22B19764400018A9F /* Alamofire */; };
 		DD897E38DEF33AFD9FFE04B0 /* libPods-NewProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25896C1952934DD4BCE387C4 /* libPods-NewProject.a */; };
 /* End PBXBuildFile section */
 
@@ -85,7 +88,7 @@
 		893E55072B16B47F008B0A5F /* UserDefaultsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserDefaultsManager.swift; path = NewProject/UserDefaultsManager.swift; sourceTree = "<group>"; };
 		8961ADF22B162E220064F0F8 /* Youtube Share.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Youtube Share.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8961ADF42B162E220064F0F8 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		8961ADF72B162E220064F0F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		8961ADF72B162E220064F0F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MyStoryboard.storyboard; sourceTree = "<group>"; };
 		8961ADF92B162E220064F0F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8961AE012B163A8B0064F0F8 /* NewProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NewProject.entitlements; path = NewProject/NewProject.entitlements; sourceTree = "<group>"; };
 		8961AE022B163BD50064F0F8 /* Youtube Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Youtube Share.entitlements"; sourceTree = "<group>"; };
@@ -108,6 +111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD897E38DEF33AFD9FFE04B0 /* libPods-NewProject.a in Frameworks */,
+				8992B26B2B18CAB400CAD124 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,6 +120,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8908EB312B1812A600299E5C /* FirebaseFirestore in Frameworks */,
+				89A00DA32B19764400018A9F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,7 +156,6 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				8908EB332B1827F000299E5C /* 1024realtitle.png */,
 				8908EB342B1828A600299E5C /* 80icon.png */,
-				8908EB352B1828C200299E5C /* 120icon.png */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -210,9 +214,10 @@
 		8961ADF32B162E220064F0F8 /* Youtube Share */ = {
 			isa = PBXGroup;
 			children = (
+				8908EB352B1828C200299E5C /* 120icon.png */,
 				8961AE022B163BD50064F0F8 /* Youtube Share.entitlements */,
 				8961ADF42B162E220064F0F8 /* ShareViewController.swift */,
-				8961ADF62B162E220064F0F8 /* MainInterface.storyboard */,
+				8961ADF62B162E220064F0F8 /* MyStoryboard.storyboard */,
 				8961ADF92B162E220064F0F8 /* Info.plist */,
 			);
 			path = "Youtube Share";
@@ -276,6 +281,9 @@
 				8961ADFB2B162E220064F0F8 /* PBXTargetDependency */,
 			);
 			name = NewProject;
+			packageProductDependencies = (
+				8992B26A2B18CAB400CAD124 /* FirebaseFirestore */,
+			);
 			productName = NewProject;
 			productReference = 13B07F961A680F5B00A75B9A /* NewProject.app */;
 			productType = "com.apple.product-type.application";
@@ -295,6 +303,7 @@
 			name = "Youtube Share";
 			packageProductDependencies = (
 				8908EB302B1812A600299E5C /* FirebaseFirestore */,
+				89A00DA22B19764400018A9F /* Alamofire */,
 			);
 			productName = "Youtube Share";
 			productReference = 8961ADF22B162E220064F0F8 /* Youtube Share.appex */;
@@ -333,6 +342,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				893E55002B16A368008B0A5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -367,7 +377,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8961ADF82B162E220064F0F8 /* MainInterface.storyboard in Resources */,
+				8961ADF82B162E220064F0F8 /* MyStoryboard.storyboard in Resources */,
+				8992B2692B18B17400CAD124 /* 120icon.png in Resources */,
 				8908EB322B1815A300299E5C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -568,12 +579,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		8961ADF62B162E220064F0F8 /* MainInterface.storyboard */ = {
+		8961ADF62B162E220064F0F8 /* MyStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				8961ADF72B162E220064F0F8 /* Base */,
 			);
-			name = MainInterface.storyboard;
+			name = MyStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -988,6 +999,14 @@
 				minimumVersion = 10.18.0;
 			};
 		};
+		89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1000,6 +1019,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 893E55002B16A368008B0A5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		8992B26A2B18CAB400CAD124 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 893E55002B16A368008B0A5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		89A00DA22B19764400018A9F /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
