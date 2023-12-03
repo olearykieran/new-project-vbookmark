@@ -4,18 +4,20 @@
 
 #import <Firebase.h>
 
+#import "NewProject-Swift.h"
+
 @implementation AppDelegate
 
-  
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   @try {
-      [FIRApp configure];
-      NSLog(@"Firebase configured successfully.");
-    }
-    @catch (NSException *exception) {
-      NSLog(@"Error configuring Firebase: %@", exception.reason);
-    }
+    [FIRApp configure];
+    NSLog(@"Firebase configured successfully.");
+  }
+  @catch (NSException *exception) {
+    NSLog(@"Error configuring Firebase: %@", exception.reason);
+  }
   
   self.moduleName = @"NewProject";
   // You can add your custom initial props in the dictionary below.
@@ -26,7 +28,9 @@
   NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
   NSString* storyboardName = infoDict[@"NSExtensionMainStoryboard"];
   NSLog(@"Main storyboard: %@", storyboardName);
-
+  
+  [KeychainManager.shared setupKeychain];  // Set up the keychain
+  
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

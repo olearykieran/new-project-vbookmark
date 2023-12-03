@@ -9,6 +9,7 @@ import {
   limit,
   doc,
   deleteDoc,
+  orderBy,
 } from 'firebase/firestore';
 
 const db = getFirestore(app);
@@ -33,6 +34,7 @@ export const getBookmarks = async userID => {
     const q = query(
       collection(db, 'Bookmarks'),
       where('userID', '==', userID),
+      orderBy('created', 'desc'), // Add this line to sort by the 'created' field
       limit(10),
     );
     const querySnapshot = await getDocs(q);

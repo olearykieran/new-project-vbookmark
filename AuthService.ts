@@ -2,12 +2,10 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeModules} from 'react-native';
 const {UserDefaultsManager} = NativeModules;
+import Config from 'react-native-config';
 
 GoogleSignin.configure({
-  /* webClientId:
-    '1002687147571-d1v8i9abev7ugnt26uafienip8b6v7qv.apps.googleusercontent.com', */
-  iosClientId:
-    '274554538083-5b0o333cqqrhobemmp7o6h1cf10dvnq2.apps.googleusercontent.com',
+  iosClientId: Config.IOS_CLIENT_ID,
 });
 
 export async function signInWithGoogle() {
@@ -35,6 +33,14 @@ export async function signOut() {
   try {
     await GoogleSignin.revokeAccess(); // Optional: remove access
     await GoogleSignin.signOut();
+    // Clear the user ID from shared UserDefaults
+    UserDefaultsManager.clearUserID()
+      .then(() => {
+        console.log('UserID cleared successfully.');
+      })
+      .catch(error => {
+        console.error('Failed to clear UserID', error);
+      });
   } catch (error) {
     console.error('Google Sign-Out Error', error);
   }

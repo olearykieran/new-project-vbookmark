@@ -9,7 +9,9 @@ import {
   Image,
   Linking,
   RefreshControl,
-  Alert, // Import Alert here
+  Alert,
+  ActivityIndicator,
+  Share,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {signInWithGoogle, signOut} from './AuthService';
@@ -19,10 +21,22 @@ const LoginScreen = () => {
   const [user, setUser] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Function to show an alert
   const showAlert = (title, message) => {
     Alert.alert(title, message, [{text: 'OK'}], {cancelable: true});
+  };
+
+  // Function to handle the sharing of a bookmark
+  const handleShare = async url => {
+    try {
+      await Share.share({
+        message: `Check out this bookmark: ${url}`,
+      });
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   // In your component
@@ -46,37 +60,28 @@ const LoginScreen = () => {
   useEffect(() => {
     const fetchBookmarks = async () => {
       if (user) {
+        setIsLoading(true); // Start loading
         try {
           console.log('Fetching bookmarks for user:', user.id);
-          const bookmarks = await getBookmarks(user.id);
-          const updatedBookmarks = [];
+          let bookmarks = await getBookmarks(user.id);
 
-          for (const bookmark of bookmarks) {
-            console.log('Processing bookmark:', bookmark);
+          // Sort bookmarks by creation time in descending order
+          bookmarks.sort((a, b) => b.created.seconds - a.created.seconds);
 
-            if (bookmark.source === 'iOS') {
-              // Convert time from milliseconds to seconds and round down
-              const videoTimestampInSeconds = Math.floor(bookmark.time);
-
-              // Check if URL already has query parameters and append 't' parameter
-              const separator = bookmark.url.includes('?') ? '&' : '?';
-              const urlWithTimestamp = `${bookmark.url}${separator}t=${videoTimestampInSeconds}s`;
-
-              console.log('Updated URL with timestamp:', urlWithTimestamp);
-
-              // Create a new bookmark object with the updated URL
-              const updatedBookmark = {...bookmark, url: urlWithTimestamp};
-              updatedBookmarks.push(updatedBookmark);
-            } else {
-              updatedBookmarks.push(bookmark);
-            }
-          }
+          const updatedBookmarks = bookmarks.map(bookmark => {
+            const videoTimestampInSeconds = Math.floor(bookmark.time);
+            const separator = bookmark.url.includes('?') ? '&' : '?';
+            const urlWithTimestamp = `${bookmark.url}${separator}t=${videoTimestampInSeconds}s`;
+            console.log('Updated URL with timestamp:', urlWithTimestamp);
+            return {...bookmark, url: urlWithTimestamp};
+          });
 
           console.log('Updated bookmarks:', updatedBookmarks);
           setBookmarks(updatedBookmarks);
         } catch (error) {
           console.error('Error fetching bookmarks:', error);
         }
+        setIsLoading(false); // Stop loading after fetching
       }
     };
 
@@ -88,24 +93,18 @@ const LoginScreen = () => {
       setRefreshing(true); // Start refreshing
       try {
         console.log('Refreshing bookmarks for user:', user.id);
-        const newBookmarks = await getBookmarks(user.id);
-        const updatedBookmarks = [];
+        let newBookmarks = await getBookmarks(user.id);
 
-        for (const bookmark of newBookmarks) {
-          console.log('Processing bookmark:', bookmark);
+        // Sort bookmarks by creation time in descending order
+        newBookmarks.sort((a, b) => b.created.seconds - a.created.seconds);
 
-          if (bookmark.source === 'iOS') {
-            const videoTimestampInSeconds = Math.floor(bookmark.time);
-            const separator = bookmark.url.includes('?') ? '&' : '?';
-            const urlWithTimestamp = `${bookmark.url}${separator}t=${videoTimestampInSeconds}s`;
-
-            console.log('Updated URL with timestamp:', urlWithTimestamp);
-            const updatedBookmark = {...bookmark, url: urlWithTimestamp};
-            updatedBookmarks.push(updatedBookmark);
-          } else {
-            updatedBookmarks.push(bookmark);
-          }
-        }
+        const updatedBookmarks = newBookmarks.map(bookmark => {
+          const videoTimestampInSeconds = Math.floor(bookmark.time);
+          const separator = bookmark.url.includes('?') ? '&' : '?';
+          const urlWithTimestamp = `${bookmark.url}${separator}t=${videoTimestampInSeconds}s`;
+          console.log('Updated URL with timestamp:', urlWithTimestamp);
+          return {...bookmark, url: urlWithTimestamp};
+        });
 
         console.log('Refreshed bookmarks:', updatedBookmarks);
         setBookmarks(updatedBookmarks); // Update state with new bookmarks
@@ -174,28 +173,33 @@ const LoginScreen = () => {
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
             <View style={styles.bookmarkListHeader}>
-              <Text style={styles.bookmarksHeader}>Bookmarks</Text>
-              {bookmarks.map((bookmark, index) => (
-                <View key={bookmark.id} style={styles.bookmarkContainer}>
-                  <TouchableOpacity
-                    onPress={() => handleOpenLink(bookmark.url)}>
-                    <Text style={styles.bookmarkTitle}>{bookmark.title}</Text>
-                  </TouchableOpacity>
-                  <Image
-                    source={{uri: bookmark.thumbnail}}
-                    style={styles.thumbnail}
-                  />
-                  <Text style={styles.bookmarkNumber}>{index + 1}</Text>
-                  <Text style={styles.bookmarkTime}>
-                    {secondsToHMS(bookmark.time)}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => handleDeleteBookmark(bookmark.id)}
-                    style={styles.deleteButton}>
-                    <Text style={styles.deleteButtonText}>Delete</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
+              <Text style={styles.bookmarksHeader}>My Bookmarks</Text>
+              {isLoading ? (
+                <ActivityIndicator size="large" color="#ffffff" />
+              ) : (
+                bookmarks.map((bookmark, index) => (
+                  <View key={bookmark.id} style={styles.bookmarkContainer}>
+                    <TouchableOpacity
+                      onPress={() => handleOpenLink(bookmark.url)}
+                      onLongPress={() => handleShare(bookmark.url)}>
+                      <Text style={styles.bookmarkTitle}>{bookmark.title}</Text>
+                    </TouchableOpacity>
+                    <Image
+                      source={{uri: bookmark.thumbnail}}
+                      style={styles.thumbnail}
+                    />
+                    <Text style={styles.bookmarkNumber}>{index + 1}</Text>
+                    <Text style={styles.bookmarkTime}>
+                      {secondsToHMS(bookmark.time)}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => handleDeleteBookmark(bookmark.id)}
+                      style={styles.deleteButton}>
+                      <Text style={styles.deleteButtonText}>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
+                ))
+              )}
             </View>
           </View>
         ) : (

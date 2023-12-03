@@ -61,15 +61,6 @@
          BundleIdentifier = "com.google.ios.youtube"
          RemotePath = "/var/containers/Bundle/Application/5ED6BFEB-1A00-4C65-B097-FE095D489483/YouTube.app">
       </RemoteRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "NewProject.app"
-            BlueprintName = "NewProject"
-            ReferencedContainer = "container:NewProject.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "YOUTUBE_API_KEY"

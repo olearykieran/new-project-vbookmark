@@ -66,3 +66,7 @@ yarn-error.log
 /coverage
 
 /ios/GoogleService-Info.plist
+
+.env
+
+/firebaseConfig.js
