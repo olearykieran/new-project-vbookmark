@@ -61,8 +61,6 @@ const LoginScreen = () => {
       } else if (user && user.provider === 'apple') {
         // Apple sign-out
         await signOutApple();
-        await AsyncStorage.removeItem('userID');
-        await UserDefaultsManager.clearUserID();
         console.log('UserID cleared successfully.');
       }
       setUser(null); // Clear the user info from state
@@ -88,8 +86,13 @@ const LoginScreen = () => {
       if (user) {
         setIsLoading(true); // Start loading
         try {
-          console.log('Fetching bookmarks for user:', user.id);
-          let bookmarks = await getBookmarks(user.id);
+          console.log(
+            'Fetching bookmarks for user:',
+            user.provider === 'google' ? user.id : user.email,
+          );
+          let bookmarks = await getBookmarks(
+            user.provider === 'google' ? user.id : user.email,
+          );
 
           // Sort bookmarks by creation time in descending order
           bookmarks.sort((a, b) => b.created.seconds - a.created.seconds);
@@ -118,8 +121,13 @@ const LoginScreen = () => {
     if (user) {
       setRefreshing(true); // Start refreshing
       try {
-        console.log('Refreshing bookmarks for user:', user.id);
-        let newBookmarks = await getBookmarks(user.id);
+        console.log(
+          'Refreshing bookmarks for user:',
+          user.provider === 'google' ? user.id : user.email,
+        );
+        let newBookmarks = await getBookmarks(
+          user.provider === 'google' ? user.id : user.email,
+        );
 
         // Sort bookmarks by creation time in descending order
         newBookmarks.sort((a, b) => b.created.seconds - a.created.seconds);
@@ -194,7 +202,7 @@ const LoginScreen = () => {
         <Image source={require('./images/vbtitle.png')} style={styles.logo} />
         {user ? (
           <View>
-            <Text style={styles.title}>Logged in as {user.email}</Text>
+            <Text style={styles.title}>Logged in as {user && user.email}</Text>
             <TouchableOpacity style={styles.button} onPress={handleSignOut}>
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>

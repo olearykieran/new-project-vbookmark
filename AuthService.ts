@@ -32,6 +32,7 @@ export async function signOut() {
     await GoogleSignin.revokeAccess(); // Optional: remove access
     await GoogleSignin.signOut();
     // Clear the user ID from shared UserDefaults
+    await AsyncStorage.removeItem('userID');
     UserDefaultsManager.clearUserID()
       .then(() => {
         console.log('UserID cleared successfully.');
@@ -77,19 +78,13 @@ export async function signInWithApple() {
 
     const appleAuthRequestResponse = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGIN,
-      requestedScopes: [], // Remove scopes if not needed
+      requestedScopes: [],
     });
 
-    const {identityToken} = appleAuthRequestResponse;
-
-    if (!identityToken) {
-      console.error('Apple Sign-In failed - no identity token returned');
-      return;
-    }
-
     // Save the identityToken as the user ID in AsyncStorage
-    await AsyncStorage.setItem('userID', identityToken);
-    UserDefaultsManager.saveUserID(identityToken)
+    await AsyncStorage.setItem('userID', appleAuthRequestResponse.email);
+
+    UserDefaultsManager.saveUserID(appleAuthRequestResponse.email)
       .then(() => console.log('UserID saved successfully.'))
       .catch(error => console.error('Failed to save UserID', error));
 
