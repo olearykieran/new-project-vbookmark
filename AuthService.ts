@@ -45,16 +45,15 @@ export async function signOut() {
 }
 
 async function verifyIdentityTokenWithServer(identityToken) {
+  const serverUrl = 'http://192.168.0.5:8888/.netlify/functions/auth-apple'; // Replace 192.168.x.x with your actual IP
+
   try {
     // Replace the URL with your Netlify function endpoint
-    const response = await fetch(
-      'http://localhost:8888/.netlify/functions/auth-apple',
-      {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({identityToken}),
-      },
-    );
+    const response = await fetch(serverUrl, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({identityToken}),
+    });
 
     if (!response.ok) {
       throw new Error('Server verification failed');
