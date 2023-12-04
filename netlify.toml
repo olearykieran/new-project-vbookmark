@@ -1,4 +1,7 @@
-# netlify.toml
+[dev]
+  command = "echo 'Netlify functions running'"
+  port = 8888
+  targetPort = 5000 # or any other port that your local server might use
 
 [functions]
   directory = "netlify/functions"
