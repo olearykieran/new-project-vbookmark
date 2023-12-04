@@ -45,7 +45,7 @@ export async function signOut() {
 }
 
 async function verifyIdentityTokenWithServer(identityToken) {
-  const serverUrl = 'http://192.168.0.5:8888/.netlify/functions/auth-apple'; // Replace 192.168.x.x with your actual IP
+  const serverUrl = 'http://localhost:8888/.netlify/functions/auth-apple'; // Replace 192.168.x.x with your actual IP
 
   try {
     // Replace the URL with your Netlify function endpoint
