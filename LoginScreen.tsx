@@ -14,8 +14,14 @@ import {
   Share,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {signInWithGoogle, signOut} from './AuthService';
+import {
+  signInWithGoogle,
+  signInWithApple,
+  signOutApple,
+  signOut,
+} from './AuthService';
 import {getBookmarks, addBookmark, deleteBookmark} from './FirebaseService.js';
+import {AppleButton} from '@invertase/react-native-apple-authentication';
 
 const LoginScreen = () => {
   const [user, setUser] = useState(null);
@@ -44,16 +50,36 @@ const LoginScreen = () => {
     const userInfo = await signInWithGoogle();
     if (userInfo) {
       console.log('Google Sign-In Successful');
-      setUser(userInfo.user); // Update this line to setUser(userInfo.user)
+      setUser({...userInfo.user, provider: 'google'}); // Update state with user info
     }
   };
 
   const handleSignOut = async () => {
     try {
-      await signOut(); // Implement this function to sign out from Google
+      if (user && user.provider === 'google') {
+        await signOut(); // Google sign-out
+      } else if (user && user.provider === 'apple') {
+        // Apple sign-out
+        await signOutApple();
+        await AsyncStorage.removeItem('userID');
+        await UserDefaultsManager.clearUserID();
+        console.log('UserID cleared successfully.');
+      }
       setUser(null); // Clear the user info from state
     } catch (error) {
       console.error('Sign-Out Error', error);
+      if (error.message.includes('Failed to clear UserID')) {
+        console.error('Failed to clear UserID', error);
+      }
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    const userInfo = await signInWithApple();
+    if (userInfo) {
+      console.log('Apple Sign-In Successful');
+      // Use the returned userInfo to set the user state
+      setUser({...userInfo, provider: 'apple'});
     }
   };
 
@@ -208,6 +234,15 @@ const LoginScreen = () => {
             <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
               <Text style={styles.buttonText}>Sign In with Google</Text>
             </TouchableOpacity>
+            <AppleButton
+              buttonStyle={AppleButton.Style.BLACK}
+              buttonType={AppleButton.Type.SIGN_IN}
+              style={{
+                width: 160, // You can adjust the width
+                height: 45, // You can adjust the height
+              }}
+              onPress={handleAppleLogin}
+            />
           </View>
         )}
       </ScrollView>

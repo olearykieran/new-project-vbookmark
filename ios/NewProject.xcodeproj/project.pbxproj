@@ -21,16 +21,18 @@
 		893E55092B16B47F008B0A5F /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893E55072B16B47F008B0A5F /* UserDefaultsManager.swift */; };
 		8961ADF52B162E220064F0F8 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8961ADF42B162E220064F0F8 /* ShareViewController.swift */; };
 		8961ADF82B162E220064F0F8 /* MyStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8961ADF62B162E220064F0F8 /* MyStoryboard.storyboard */; };
-		8961ADFC2B162E220064F0F8 /* Youtube Share.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8961ADF22B162E220064F0F8 /* Youtube Share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8992B2692B18B17400CAD124 /* 120icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8908EB352B1828C200299E5C /* 120icon.png */; };
 		8992B26B2B18CAB400CAD124 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 8992B26A2B18CAB400CAD124 /* FirebaseFirestore */; };
 		89A00DA52B1AB09F00018A9F /* 120icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 89A00DA42B1AB07B00018A9F /* 120icon.png */; };
 		89A00DA82B1BC05F00018A9F /* vbtitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 89A00DA72B1BC05F00018A9F /* vbtitle.png */; };
 		89A00DAA2B1C016A00018A9F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 89A00DA92B1C016A00018A9F /* Alamofire */; };
 		89A00DAD2B1C0E1800018A9F /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 89A00DAC2B1C0E1800018A9F /* KeychainSwift */; };
-		89A00DAF2B1C0E2500018A9F /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 89A00DAE2B1C0E2500018A9F /* KeychainSwift */; };
 		89A00DB12B1C117000018A9F /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A00DB02B1C117000018A9F /* KeychainManager.swift */; };
 		89A00DB22B1C117000018A9F /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A00DB02B1C117000018A9F /* KeychainManager.swift */; };
+		89A00DB42B1CB0E800018A9F /* hg_transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = 89A00DB32B1CB0E800018A9F /* hg_transparent.png */; };
+		89A00DB62B1CBA1400018A9F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 89A00DB52B1CBA1400018A9F /* Alamofire */; };
+		89A00DB82B1CBC0500018A9F /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 89A00DB72B1CBC0500018A9F /* KeychainSwift */; };
+		89A00DB92B1CBFD600018A9F /* Youtube Share.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8961ADF22B162E220064F0F8 /* Youtube Share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DD897E38DEF33AFD9FFE04B0 /* libPods-NewProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25896C1952934DD4BCE387C4 /* libPods-NewProject.a */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +44,7 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = NewProject;
 		};
-		8961ADFA2B162E220064F0F8 /* PBXContainerItemProxy */ = {
+		89A00DBA2B1CBFD700018A9F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
@@ -52,13 +54,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		8961ADFD2B162E220064F0F8 /* Embed Foundation Extensions */ = {
+		89A00DBC2B1CBFD700018A9F /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				8961ADFC2B162E220064F0F8 /* Youtube Share.appex in Embed Foundation Extensions */,
+				89A00DB92B1CBFD600018A9F /* Youtube Share.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,10 +78,11 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = NewProject/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NewProject/main.m; sourceTree = "<group>"; };
 		25896C1952934DD4BCE387C4 /* libPods-NewProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NewProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		340C8A1FEDCEFF12C4D397C5 /* Pods-NewProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewProject.debug.xcconfig"; path = "Target Support Files/Pods-NewProject/Pods-NewProject.debug.xcconfig"; sourceTree = "<group>"; };
 		345717DF4D2C59F49249A29F /* Pods-NewProject-NewProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewProject-NewProjectTests.release.xcconfig"; path = "Target Support Files/Pods-NewProject-NewProjectTests/Pods-NewProject-NewProjectTests.release.xcconfig"; sourceTree = "<group>"; };
+		4A92C364EC028AE911289D65 /* Pods-NewProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewProject.release.xcconfig"; path = "Target Support Files/Pods-NewProject/Pods-NewProject.release.xcconfig"; sourceTree = "<group>"; };
 		4F01900A5A54A96A3E5537AA /* libPods-NewProject-NewProjectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NewProject-NewProjectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		630A14621476D48839551DB4 /* Pods-NewProject-NewProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewProject-NewProjectTests.debug.xcconfig"; path = "Target Support Files/Pods-NewProject-NewProjectTests/Pods-NewProject-NewProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6D8FFAA103DF1DF24BE88550 /* Pods-NewProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewProject.debug.xcconfig"; path = "Target Support Files/Pods-NewProject/Pods-NewProject.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NewProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8908EB2D2B18111A00299E5C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8908EB332B1827F000299E5C /* 1024realtitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1024realtitle.png; sourceTree = "<group>"; };
@@ -101,8 +104,8 @@
 		89A00DA42B1AB07B00018A9F /* 120icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 120icon.png; sourceTree = "<group>"; };
 		89A00DA72B1BC05F00018A9F /* vbtitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vbtitle.png; sourceTree = "<group>"; };
 		89A00DB02B1C117000018A9F /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		89A00DB32B1CB0E800018A9F /* hg_transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hg_transparent.png; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F0954856DE21BDC7DB307D3B /* Pods-NewProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewProject.release.xcconfig"; path = "Target Support Files/Pods-NewProject/Pods-NewProject.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89A00DAD2B1C0E1800018A9F /* KeychainSwift in Frameworks */,
+				89A00DB62B1CBA1400018A9F /* Alamofire in Frameworks */,
 				DD897E38DEF33AFD9FFE04B0 /* libPods-NewProject.a in Frameworks */,
 				8992B26B2B18CAB400CAD124 /* FirebaseFirestore in Frameworks */,
 			);
@@ -129,7 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89A00DAF2B1C0E2500018A9F /* KeychainSwift in Frameworks */,
+				89A00DB82B1CBC0500018A9F /* KeychainSwift in Frameworks */,
 				8908EB312B1812A600299E5C /* FirebaseFirestore in Frameworks */,
 				89A00DAA2B1C016A00018A9F /* Alamofire in Frameworks */,
 			);
@@ -169,6 +173,7 @@
 				8908EB342B1828A600299E5C /* 80icon.png */,
 				89A00DA42B1AB07B00018A9F /* 120icon.png */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				89A00DB32B1CB0E800018A9F /* hg_transparent.png */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				8934D0482B179203004E86B8 /* NewProject-Bridging-Header.h */,
@@ -240,10 +245,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				340C8A1FEDCEFF12C4D397C5 /* Pods-NewProject.debug.xcconfig */,
-				F0954856DE21BDC7DB307D3B /* Pods-NewProject.release.xcconfig */,
 				630A14621476D48839551DB4 /* Pods-NewProject-NewProjectTests.debug.xcconfig */,
 				345717DF4D2C59F49249A29F /* Pods-NewProject-NewProjectTests.release.xcconfig */,
+				6D8FFAA103DF1DF24BE88550 /* Pods-NewProject.debug.xcconfig */,
+				4A92C364EC028AE911289D65 /* Pods-NewProject.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -285,19 +290,20 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				8961ADFD2B162E220064F0F8 /* Embed Foundation Extensions */,
 				243414F483292578D08BF397 /* [CP] Embed Pods Frameworks */,
 				D8EAA6906B479229F6033A45 /* [CP] Copy Pods Resources */,
+				89A00DBC2B1CBFD700018A9F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				8961ADFB2B162E220064F0F8 /* PBXTargetDependency */,
+				89A00DBB2B1CBFD700018A9F /* PBXTargetDependency */,
 			);
 			name = NewProject;
 			packageProductDependencies = (
 				8992B26A2B18CAB400CAD124 /* FirebaseFirestore */,
 				89A00DAC2B1C0E1800018A9F /* KeychainSwift */,
+				89A00DB52B1CBA1400018A9F /* Alamofire */,
 			);
 			productName = NewProject;
 			productReference = 13B07F961A680F5B00A75B9A /* NewProject.app */;
@@ -319,7 +325,7 @@
 			packageProductDependencies = (
 				8908EB302B1812A600299E5C /* FirebaseFirestore */,
 				89A00DA92B1C016A00018A9F /* Alamofire */,
-				89A00DAE2B1C0E2500018A9F /* KeychainSwift */,
+				89A00DB72B1CBC0500018A9F /* KeychainSwift */,
 			);
 			productName = "Youtube Share";
 			productReference = 8961ADF22B162E220064F0F8 /* Youtube Share.appex */;
@@ -358,8 +364,8 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				893E55002B16A368008B0A5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */,
-				89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire.git" */,
+				89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift.git" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -384,6 +390,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89A00DB42B1CB0E800018A9F /* hg_transparent.png in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				8908EB2E2B18111A00299E5C /* GoogleService-Info.plist in Resources */,
 				89A00DA52B1AB09F00018A9F /* 120icon.png in Resources */,
@@ -592,10 +599,10 @@
 			target = 13B07F861A680F5B00A75B9A /* NewProject */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
-		8961ADFB2B162E220064F0F8 /* PBXTargetDependency */ = {
+		89A00DBB2B1CBFD700018A9F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8961ADF12B162E220064F0F8 /* Youtube Share */;
-			targetProxy = 8961ADFA2B162E220064F0F8 /* PBXContainerItemProxy */;
+			targetProxy = 89A00DBA2B1CBFD700018A9F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -668,13 +675,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 340C8A1FEDCEFF12C4D397C5 /* Pods-NewProject.debug.xcconfig */;
+			baseConfigurationReference = 6D8FFAA103DF1DF24BE88550 /* Pods-NewProject.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NewProject/NewProject.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JM6RWFSRJ9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NewProject/Info.plist;
@@ -683,7 +689,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -700,13 +706,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F0954856DE21BDC7DB307D3B /* Pods-NewProject.release.xcconfig */;
+			baseConfigurationReference = 4A92C364EC028AE911289D65 /* Pods-NewProject.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NewProject/NewProject.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JM6RWFSRJ9;
 				INFOPLIST_FILE = NewProject/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Video Bookmark";
@@ -714,7 +719,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -885,8 +890,8 @@
 		};
 		8961ADFE2B162E220064F0F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 340C8A1FEDCEFF12C4D397C5 /* Pods-NewProject.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -933,8 +938,8 @@
 		};
 		8961ADFF2B162E220064F0F8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F0954856DE21BDC7DB307D3B /* Pods-NewProject.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1024,7 +1029,7 @@
 				minimumVersion = 10.18.0;
 			};
 		};
-		89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -1032,7 +1037,7 @@
 				minimumVersion = 5.8.1;
 			};
 		};
-		89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+		89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {
@@ -1060,17 +1065,22 @@
 		};
 		89A00DA92B1C016A00018A9F /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire.git" */;
 			productName = Alamofire;
 		};
 		89A00DAC2B1C0E1800018A9F /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			package = 89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift.git" */;
 			productName = KeychainSwift;
 		};
-		89A00DAE2B1C0E2500018A9F /* KeychainSwift */ = {
+		89A00DB52B1CBA1400018A9F /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			package = 89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire.git" */;
+			productName = Alamofire;
+		};
+		89A00DB72B1CBC0500018A9F /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift.git" */;
 			productName = KeychainSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
