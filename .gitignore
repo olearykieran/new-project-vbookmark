@@ -70,3 +70,5 @@ yarn-error.log
 .env
 
 /firebaseConfig.js
+# Local Netlify folder
+.netlify

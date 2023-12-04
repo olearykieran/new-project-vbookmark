@@ -2,7 +2,7 @@
   command = "npx react-native start --reset-cache" # Replace with your start command
   port = 8888
   targetPort = 8081 # The port your React Native app runs on
-  autoLaunch = true # Prevent Netlify Dev from opening a browser window
+  autoLaunch = false # Prevent Netlify Dev from opening a browser window
 
 [functions]
   directory = "netlify/functions"
