@@ -87,22 +87,14 @@ export async function signInWithApple() {
       return;
     }
 
-    // Send the identityToken to your server for verification
-    const verifiedUser = await verifyIdentityTokenWithServer(identityToken);
-    if (!verifiedUser) {
-      console.error('Failed to verify identity token with server');
-      return;
-    }
-
-    // Save the user ID similarly to Google Sign-In
-    const userId = verifiedUser.id; // Assuming your server returns a user object with an 'id' field
-    await AsyncStorage.setItem('userID', userId);
-    UserDefaultsManager.saveUserID(userId)
+    // Save the identityToken as the user ID in AsyncStorage
+    await AsyncStorage.setItem('userID', identityToken);
+    UserDefaultsManager.saveUserID(identityToken)
       .then(() => console.log('UserID saved successfully.'))
       .catch(error => console.error('Failed to save UserID', error));
 
-    console.log('Apple Sign-In successful:', verifiedUser);
-    return verifiedUser;
+    console.log('Apple Sign-In successful');
+    return appleAuthRequestResponse; // Return the response object if needed
   } catch (error) {
     console.error('Apple Sign-In Error:', error);
     return null;
