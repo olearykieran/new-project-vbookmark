@@ -71,7 +71,7 @@
 		00E356EE1AD99517003FC87E /* NewProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* NewProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewProjectTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* NewProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Video Bookmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Video Bookmark.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = NewProject/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = NewProject/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = NewProject/Images.xcassets; sourceTree = "<group>"; };
@@ -222,7 +222,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* NewProject.app */,
+				13B07F961A680F5B00A75B9A /* Video Bookmark.app */,
 				00E356EE1AD99517003FC87E /* NewProjectTests.xctest */,
 				8961ADF22B162E220064F0F8 /* Youtube Share.appex */,
 			);
@@ -306,7 +306,7 @@
 				89A00DB52B1CBA1400018A9F /* Alamofire */,
 			);
 			productName = NewProject;
-			productReference = 13B07F961A680F5B00A75B9A /* NewProject.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Video Bookmark.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8961ADF12B162E220064F0F8 /* Youtube Share */ = {
@@ -696,7 +696,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.holygrail.videobookmark;
-				PRODUCT_NAME = NewProject;
+				PRODUCT_NAME = "Video Bookmark";
 				SWIFT_OBJC_BRIDGING_HEADER = "NewProject-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -726,7 +726,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.holygrail.videobookmark;
-				PRODUCT_NAME = NewProject;
+				PRODUCT_NAME = "Video Bookmark";
 				SWIFT_OBJC_BRIDGING_HEADER = "NewProject-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
