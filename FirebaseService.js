@@ -31,14 +31,25 @@ export const addBookmark = async (bookmark, userID) => {
 
 export const getBookmarks = async userID => {
   try {
+    if (!userID) {
+      console.warn('No userID provided for fetching bookmarks.');
+      return []; // Return an empty array if userID is undefined
+    }
+
     const q = query(
       collection(db, 'Bookmarks'),
       where('userID', '==', userID),
-      orderBy('created', 'desc'), // Add this line to sort by the 'created' field
+      orderBy('created', 'desc'),
       limit(10),
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+    } else {
+      console.log('No bookmarks found for the user.');
+      return []; // Return an empty array if no bookmarks are found
+    }
   } catch (error) {
     console.error('Error fetching bookmarks:', error);
     throw error;

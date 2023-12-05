@@ -76,8 +76,10 @@ const LoginScreen = () => {
     const userInfo = await signInWithApple();
     if (userInfo) {
       console.log('Apple Sign-In Successful');
-      // Use the returned userInfo to set the user state
-      setUser({...userInfo, provider: 'apple'});
+      setUser({
+        appleUserId: userInfo.appleUserID,
+        provider: 'apple',
+      });
     }
   };
 
@@ -85,14 +87,10 @@ const LoginScreen = () => {
     const fetchBookmarks = async () => {
       if (user) {
         setIsLoading(true); // Start loading
+        const userId = user.provider === 'google' ? user.id : user.appleUserId;
         try {
-          console.log(
-            'Fetching bookmarks for user:',
-            user.provider === 'google' ? user.id : user.email,
-          );
-          let bookmarks = await getBookmarks(
-            user.provider === 'google' ? user.id : user.email,
-          );
+          console.log('Fetching bookmarks for user:', userId);
+          let bookmarks = await getBookmarks(userId);
 
           // Sort bookmarks by creation time in descending order
           bookmarks.sort((a, b) => b.created.seconds - a.created.seconds);
@@ -120,14 +118,10 @@ const LoginScreen = () => {
   const refreshBookmarks = async () => {
     if (user) {
       setRefreshing(true); // Start refreshing
+      const userId = user.provider === 'google' ? user.id : user.appleUserId;
       try {
-        console.log(
-          'Refreshing bookmarks for user:',
-          user.provider === 'google' ? user.id : user.email,
-        );
-        let newBookmarks = await getBookmarks(
-          user.provider === 'google' ? user.id : user.email,
-        );
+        console.log('Refreshing bookmarks for user:', userId);
+        let newBookmarks = await getBookmarks(userId);
 
         // Sort bookmarks by creation time in descending order
         newBookmarks.sort((a, b) => b.created.seconds - a.created.seconds);
@@ -202,7 +196,10 @@ const LoginScreen = () => {
         <Image source={require('./images/vbtitle.png')} style={styles.logo} />
         {user ? (
           <View>
-            <Text style={styles.title}>Logged in as {user && user.email}</Text>
+            <Text style={styles.title}>
+              Logged in as{' '}
+              {user && (user.provider === 'apple' ? 'Apple User' : user.email)}
+            </Text>
             <TouchableOpacity style={styles.button} onPress={handleSignOut}>
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
@@ -210,7 +207,7 @@ const LoginScreen = () => {
               <Text style={styles.bookmarksHeader}>My Bookmarks</Text>
               {isLoading ? (
                 <ActivityIndicator size="large" color="#ffffff" />
-              ) : (
+              ) : bookmarks.length > 0 ? (
                 bookmarks.map((bookmark, index) => (
                   <View key={bookmark.id} style={styles.bookmarkContainer}>
                     <TouchableOpacity
@@ -233,6 +230,8 @@ const LoginScreen = () => {
                     </TouchableOpacity>
                   </View>
                 ))
+              ) : (
+                <Text style={styles.title}>No Bookmarks Saved</Text>
               )}
             </View>
           </View>
@@ -246,8 +245,8 @@ const LoginScreen = () => {
               buttonStyle={AppleButton.Style.BLACK}
               buttonType={AppleButton.Type.SIGN_IN}
               style={{
-                width: 160, // You can adjust the width
-                height: 45, // You can adjust the height
+                width: 160,
+                height: 45,
               }}
               onPress={handleAppleLogin}
             />

@@ -4,6 +4,8 @@ import {NativeModules} from 'react-native';
 const {UserDefaultsManager} = NativeModules;
 import Config from 'react-native-config';
 import {appleAuth} from '@invertase/react-native-apple-authentication';
+import {jwtDecode} from 'jwt-decode';
+import base64 from 'base64-js';
 
 GoogleSignin.configure({
   iosClientId: Config.IOS_CLIENT_ID,
@@ -81,15 +83,25 @@ export async function signInWithApple() {
       requestedScopes: [],
     });
 
-    // Save the identityToken as the user ID in AsyncStorage
-    await AsyncStorage.setItem('userID', appleAuthRequestResponse.email);
+    // Log the entire appleAuthRequestResponse object for inspection
+    console.log('Apple Sign-In Response:', appleAuthRequestResponse);
 
-    UserDefaultsManager.saveUserID(appleAuthRequestResponse.email)
-      .then(() => console.log('UserID saved successfully.'))
-      .catch(error => console.error('Failed to save UserID', error));
+    // Check if the email is defined before saving it
+    if (appleAuthRequestResponse) {
+      const appleUserID = appleAuthRequestResponse.user;
+      console.log('Apple Sign-In userID:', appleUserID); // Log the email
+      await AsyncStorage.setItem('userID', appleUserID);
 
-    console.log('Apple Sign-In successful');
-    return appleAuthRequestResponse; // Return the response object if needed
+      UserDefaultsManager.saveUserID(appleUserID)
+        .then(() => console.log('UserID saved successfully.'))
+        .catch(error => console.error('Failed to save UserID', error));
+
+      console.log('Apple Sign-In successful');
+      return {appleUserID}; // Return only the Apple User I
+    } else {
+      console.error('Apple Sign-In failed - no email returned');
+      return null;
+    }
   } catch (error) {
     console.error('Apple Sign-In Error:', error);
     return null;
