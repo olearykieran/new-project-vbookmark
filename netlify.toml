@@ -3,6 +3,10 @@
   port = 8888
   targetPort = 8081 # The port your React Native app runs on
   autoLaunch = false # Prevent Netlify Dev from opening a browser window
+  publish = "netlify/functions/auth-apple.js"
 
 [functions]
   directory = "netlify/functions"
+
+[build]
+  functions = "netlify/functions"git 

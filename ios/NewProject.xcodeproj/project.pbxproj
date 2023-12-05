@@ -364,8 +364,8 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				893E55002B16A368008B0A5F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire.git" */,
-				89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift.git" */,
+				89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */,
+				89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -680,7 +680,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NewProject/NewProject.entitlements;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = JM6RWFSRJ9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NewProject/Info.plist;
@@ -689,7 +689,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -711,7 +711,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NewProject/NewProject.entitlements;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = JM6RWFSRJ9;
 				INFOPLIST_FILE = NewProject/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Video Bookmark";
@@ -719,7 +719,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1029,7 +1029,7 @@
 				minimumVersion = 10.18.0;
 			};
 		};
-		89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire.git" */ = {
+		89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -1037,7 +1037,7 @@
 				minimumVersion = 5.8.1;
 			};
 		};
-		89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift.git" */ = {
+		89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {
@@ -1065,22 +1065,22 @@
 		};
 		89A00DA92B1C016A00018A9F /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire.git" */;
+			package = 89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		89A00DAC2B1C0E1800018A9F /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift.git" */;
+			package = 89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
 		89A00DB52B1CBA1400018A9F /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire.git" */;
+			package = 89A00DA12B19764400018A9F /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		89A00DB72B1CBC0500018A9F /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift.git" */;
+			package = 89A00DAB2B1C0E1800018A9F /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
