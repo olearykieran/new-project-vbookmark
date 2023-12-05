@@ -12,6 +12,7 @@ import {
   Alert,
   ActivityIndicator,
   Share,
+  Modal,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -20,7 +21,12 @@ import {
   signOutApple,
   signOut,
 } from './AuthService';
-import {getBookmarks, addBookmark, deleteBookmark} from './FirebaseService.js';
+import {
+  getBookmarks,
+  addBookmark,
+  deleteBookmark,
+  deleteAccount,
+} from './FirebaseService.js';
 import {AppleButton} from '@invertase/react-native-apple-authentication';
 
 const LoginScreen = () => {
@@ -28,6 +34,7 @@ const LoginScreen = () => {
   const [bookmarks, setBookmarks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAccountSettingsVisible, setAccountSettingsVisible] = useState(false);
 
   // Function to show an alert
   const showAlert = (title, message) => {
@@ -186,6 +193,35 @@ const LoginScreen = () => {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
 
+  const handleDeleteAccount = async () => {
+    // Confirm before deleting
+    Alert.alert(
+      'Delete Account',
+      'Are you sure you want to delete your account?',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'OK',
+          onPress: async () => {
+            if (user) {
+              const userId =
+                user.provider === 'google' ? user.id : user.appleUserId;
+              try {
+                await deleteAccount(userId);
+                setUser(null); // Clear the user info from state after deleting account
+                showAlert('Deleted', 'Account deleted successfully.');
+              } catch (error) {
+                console.error('Failed to delete account', error);
+                showAlert('Error', 'Failed to delete account.');
+              }
+            }
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   return (
     <LinearGradient colors={['#000000', '#333333']} style={styles.container}>
       <ScrollView
@@ -200,9 +236,13 @@ const LoginScreen = () => {
               Logged in as{' '}
               {user && (user.provider === 'apple' ? 'Apple User' : user.email)}
             </Text>
-            <TouchableOpacity style={styles.button} onPress={handleSignOut}>
-              <Text style={styles.buttonText}>Sign Out</Text>
-            </TouchableOpacity>
+            {user && (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setAccountSettingsVisible(true)}>
+                <Text style={styles.buttonText}>Account Settings</Text>
+              </TouchableOpacity>
+            )}
             <View style={styles.bookmarkListHeader}>
               <Text style={styles.bookmarksHeader}>My Bookmarks</Text>
               {isLoading ? (
@@ -234,6 +274,12 @@ const LoginScreen = () => {
                 <Text style={styles.title}>No Bookmarks Saved</Text>
               )}
             </View>
+            <AccountSettingsModal
+              isVisible={isAccountSettingsVisible}
+              onClose={() => setAccountSettingsVisible(false)}
+              onSignOut={handleSignOut}
+              onDeleteAccount={handleDeleteAccount}
+            />
           </View>
         ) : (
           <View style={styles.headerContainer}>
@@ -254,6 +300,49 @@ const LoginScreen = () => {
         )}
       </ScrollView>
     </LinearGradient>
+  );
+};
+
+const AccountSettingsModal = ({
+  isVisible,
+  onClose,
+  onSignOut,
+  onDeleteAccount,
+}) => {
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={onClose}>
+      <View style={styles.centeredModalView}>
+        <LinearGradient
+          colors={['#000000', '#333333']}
+          style={styles.modalView}>
+          <TouchableOpacity
+            style={[styles.modalButton, styles.buttonClose]}
+            onPress={() => {
+              onSignOut();
+              onClose();
+            }}>
+            <Text style={styles.modalButtonText}>Sign Out</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.modalButton, styles.buttonClose]}
+            onPress={() => {
+              onDeleteAccount();
+              onClose();
+            }}>
+            <Text style={styles.modalButtonText}>Delete Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.modalButton, styles.buttonClose]}
+            onPress={onClose}>
+            <Text style={styles.modalButtonText}>Close</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </View>
+    </Modal>
   );
 };
 
@@ -352,6 +441,38 @@ const styles = StyleSheet.create({
     height: 100, // set a specific height
     resizeMode: 'contain', // or 'cover' depending on what you need
     alignSelf: 'center',
+  },
+  centeredModalView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    width: '80%',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalButton: {
+    backgroundColor: '#d32f2f', // Or any other color from your app's color scheme
+    padding: 10,
+    borderRadius: 5,
+    margin: 10,
+    width: '80%',
+  },
+  modalButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

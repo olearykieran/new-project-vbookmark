@@ -4,8 +4,7 @@ import {NativeModules} from 'react-native';
 const {UserDefaultsManager} = NativeModules;
 import Config from 'react-native-config';
 import {appleAuth} from '@invertase/react-native-apple-authentication';
-import {jwtDecode} from 'jwt-decode';
-import base64 from 'base64-js';
+import {checkAndAddUserToFirestore} from './FirebaseService.js';
 
 GoogleSignin.configure({
   iosClientId: Config.IOS_CLIENT_ID,
@@ -20,6 +19,7 @@ export async function signInWithGoogle() {
     // Save the user ID right after signing in
     await AsyncStorage.setItem('userID', userInfo.user.id);
     await UserDefaultsManager.saveUserID(userInfo.user.id);
+    await checkAndAddUserToFirestore(userInfo.user.id);
 
     console.log('UserID saved successfully.');
     return userInfo; // Return the userInfo object here
@@ -92,6 +92,7 @@ export async function signInWithApple() {
       const appleUserID = appleAuthRequestResponse.user;
       console.log('Apple Sign-In userID:', appleUserID); // Log the email
       await AsyncStorage.setItem('userID', appleUserID);
+      await checkAndAddUserToFirestore(appleUserID);
 
       UserDefaultsManager.saveUserID(appleUserID)
         .then(() => console.log('UserID saved successfully.'))

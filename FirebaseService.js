@@ -6,6 +6,8 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
+  setDoc,
   limit,
   doc,
   deleteDoc,
@@ -60,4 +62,45 @@ export const deleteBookmark = async bookmarkId => {
   const db = getFirestore(app);
   const bookmarkRef = doc(db, 'Bookmarks', bookmarkId);
   await deleteDoc(bookmarkRef);
+};
+
+export async function checkAndAddUserToFirestore(userID) {
+  try {
+    const userRef = doc(db, 'users', userID);
+    const docSnap = await getDoc(userRef);
+
+    if (!docSnap.exists()) {
+      // User doesn't exist, so add them
+      await setDoc(userRef, {userId: userID});
+      console.log('User added to Firestore:', userID);
+    } else {
+      console.log('User already exists in Firestore:', userID);
+    }
+  } catch (error) {
+    console.error('Error interacting with Firestore:', error);
+  }
+}
+
+export const deleteAccount = async userID => {
+  try {
+    // Delete user's document from 'users' collection
+    const userRef = doc(db, 'users', userID);
+    await deleteDoc(userRef);
+
+    // Optionally, delete related data like bookmarks
+    // Note: This assumes bookmarks are directly related to the user ID
+    const bookmarksQuery = query(
+      collection(db, 'Bookmarks'),
+      where('userID', '==', userID),
+    );
+    const bookmarksSnapshot = await getDocs(bookmarksQuery);
+    bookmarksSnapshot.forEach(async bookmarkDoc => {
+      await deleteDoc(doc(db, 'Bookmarks', bookmarkDoc.id));
+    });
+
+    console.log('User account and related data deleted successfully.');
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    throw error;
+  }
 };
