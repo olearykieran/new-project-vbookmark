@@ -35,10 +35,15 @@ const LoginScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isAccountSettingsVisible, setAccountSettingsVisible] = useState(false);
+  const [showRefreshMessage, setShowRefreshMessage] = useState(true); // New state to control visibility
 
   // Function to show an alert
   const showAlert = (title, message) => {
     Alert.alert(title, message, [{text: 'OK'}], {cancelable: true});
+  };
+
+  const handleDismissRefreshMessage = () => {
+    setShowRefreshMessage(false); // Function to hide the message
   };
 
   // Function to handle the sharing of a bookmark
@@ -263,6 +268,9 @@ const LoginScreen = () => {
                     <Text style={styles.bookmarkTime}>
                       {secondsToHMS(bookmark.time)}
                     </Text>
+                    {bookmark.note && (
+                      <Text style={styles.bookmarkNote}>{bookmark.note}</Text>
+                    )}
                     <TouchableOpacity
                       onPress={() => handleDeleteBookmark(bookmark.id)}
                       style={styles.deleteButton}>
@@ -271,7 +279,37 @@ const LoginScreen = () => {
                   </View>
                 ))
               ) : (
-                <Text style={styles.title}>No Bookmarks Saved</Text>
+                <View style={styles.welcomeMessage}>
+                  <Text style={styles.welcomeTitle}>
+                    No Bookmarks Saved Yet
+                  </Text>
+                  <Text style={styles.welcomeText}>
+                    Welcome to Video Bookmark! Currently, our app is designed to
+                    work seamlessly with the YouTube app on iPhone. Here's how
+                    to save your first bookmark:
+                  </Text>
+                  <Text style={styles.welcomeStep}>
+                    1. Open the YouTube app on your iPhone.
+                  </Text>
+                  <Text style={styles.welcomeStep}>
+                    2. Find the video you want to bookmark.
+                  </Text>
+                  <Text style={styles.welcomeStep}>
+                    3. Tap the Share button below the video.
+                  </Text>
+                  <Text style={styles.welcomeStep}>
+                    4. In the share options, select Video Bookmark. (You might
+                    need to tap on 'More' to find it.)
+                  </Text>
+                  <Text style={styles.welcomeStep}>
+                    5. Enter the timestamp for the bookmark.
+                  </Text>
+                  <Text style={styles.welcomeStep}>6. Press Save.</Text>
+                  <Text style={styles.welcomeText}>
+                    That's it! Your bookmark will be saved and ready for you to
+                    access anytime in the Video Bookmark app.
+                  </Text>
+                </View>
               )}
             </View>
             <AccountSettingsModal
@@ -280,6 +318,26 @@ const LoginScreen = () => {
               onSignOut={handleSignOut}
               onDeleteAccount={handleDeleteAccount}
             />
+            {showRefreshMessage && (
+              <View style={styles.refreshBanner}>
+                <Text style={styles.refreshText}>
+                  1. Pull down to refresh the page after saving a new bookmark.
+                </Text>
+                <Text style={styles.refreshText}>
+                  2. Click the title of the saved bookmark to be taken to your
+                  video at the timestamp saved.
+                </Text>
+                <Text style={styles.refreshText}>
+                  3. You can also share the timestamped video with your friends
+                  by long pressing on the title of your saved bookmark. Enjoy!
+                </Text>
+                <TouchableOpacity
+                  onPress={handleDismissRefreshMessage}
+                  style={styles.dismissButton}>
+                  <Text style={styles.dismissButtonText}>Dismiss</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         ) : (
           <View style={styles.headerContainer}>
@@ -473,6 +531,57 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  bookmarkNote: {
+    color: '#f0f0f0',
+    fontStyle: 'italic', // Example style, adjust as needed
+    textAlign: 'center',
+  },
+  welcomeMessage: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 10,
+  },
+  welcomeTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  welcomeText: {
+    fontSize: 16,
+    color: '#fff',
+    marginTop: 10,
+  },
+  welcomeStep: {
+    fontSize: 16,
+    color: '#fff',
+    marginLeft: 10,
+  },
+  refreshBanner: {
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+    alignItems: 'center',
+    color: 'white',
+    marginTop: 60,
+  },
+  refreshText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'white',
+  },
+  dismissButton: {
+    marginTop: 5,
+    backgroundColor: '#555', // Adjust as needed
+    borderRadius: 5,
+    padding: 5,
+  },
+  dismissButtonText: {
+    color: 'white',
+    fontSize: 12,
   },
 });
 

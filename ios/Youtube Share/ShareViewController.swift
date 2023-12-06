@@ -11,7 +11,7 @@ struct YoutubeVideo {
   // Add other properties as needed
 }
 
-class ShareViewController: UIViewController {
+class ShareViewController: UIViewController, UITextFieldDelegate {
   // URL to be processed
   var sharedURL: URL?
   
@@ -19,9 +19,12 @@ class ShareViewController: UIViewController {
   
   var timeInSeconds: Int = 0
   
+  var activeTextField: UITextField?
+  
   @IBOutlet weak var hoursTextField: UITextField!
   @IBOutlet weak var minutesTextField: UITextField!
   @IBOutlet weak var secondsTextField: UITextField!
+  @IBOutlet weak var notesTextField: UITextField!
   
   private func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -35,11 +38,20 @@ class ShareViewController: UIViewController {
     super.viewDidLoad()
     
     apiKey = KeychainManager.shared.getAPIKey() ?? ""
+    
+    // Add keyboard observers
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
     // Set default values
     hoursTextField.text = "0"
     minutesTextField.text = "0"
     secondsTextField.text = "0"
+    
+    hoursTextField.delegate = self
+    minutesTextField.delegate = self
+    secondsTextField.delegate = self
+    notesTextField.delegate = self
     
     // Configure Firebase once when the view loads
     if FirebaseApp.app() == nil {
@@ -58,6 +70,34 @@ class ShareViewController: UIViewController {
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
     view.addGestureRecognizer(tapGesture)
   }
+  
+  deinit {
+          // Remove keyboard observers
+          NotificationCenter.default.removeObserver(self)
+      }
+  
+  // MARK: - UITextFieldDelegate Methods
+  func textFieldDidBeginEditing(_ textField: UITextField) {
+    activeTextField = textField // Update the active text field
+  }
+
+  func textFieldDidEndEditing(_ textField: UITextField) {
+     activeTextField = nil // Reset the active text field
+  }
+  
+  @objc private func keyboardWillShow(notification: NSNotification) {
+          if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+              if activeTextField == notesTextField && self.view.frame.origin.y == 0 {
+                  self.view.frame.origin.y -= keyboardSize.height
+              }
+          }
+      }
+
+  @objc private func keyboardWillHide(notification: NSNotification) {
+          if self.view.frame.origin.y != 0 {
+              self.view.frame.origin.y = 0
+          }
+      }
   
   @objc private func dismissKeyboard() {
     view.endEditing(true)
@@ -89,12 +129,27 @@ class ShareViewController: UIViewController {
   }
   
   private func handlePlainText(_ text: String) {
-    if let url = extractURL(from: text) {
-      print("Extracted URL: \(url)")
-      sharedURL = url
-    } else {
-      print("No URL found in plain text")
-    }
+      if let url = extractURL(from: text) {
+          // Check if the URL is from the YouTube app
+          if isYoutubeAppURL(url) {
+              print("Extracted URL: \(url)")
+              sharedURL = url
+          } else {
+              // Show an error message if it's not a YouTube app URL
+              showAlert(title: "Error", message: "You can only save bookmarks using the YouTube app.")
+          }
+      } else {
+          print("No URL found in plain text")
+          // Show a generic error message
+          showAlert(title: "Error", message: "Invalid content. Please use the YouTube app.")
+      }
+  }
+  
+  // Helper function to check if the URL is from the YouTube app
+  private func isYoutubeAppURL(_ url: URL) -> Bool {
+      return url.host?.contains("youtube.com") == true ||
+             url.host?.contains("youtu.be") == true ||
+             url.scheme == "youtube"
   }
   
   private func extractURL(from text: String) -> URL? {
@@ -107,27 +162,53 @@ class ShareViewController: UIViewController {
   
   
   @IBAction func postButtonPressed(_ sender: UIButton) {
+    let note = notesTextField.text ?? ""
+    
     if let url = sharedURL,
        let hoursText = hoursTextField.text,
        let minutesText = minutesTextField.text,
        let secondsText = secondsTextField.text,
-       validateTimeInput(hoursText, minutesText, secondsText) {
+       validateTimeInput(hoursText, minutesText, secondsText),
+       note.count <= 50 {
       
       // Convert hours and minutes input to seconds
       timeInSeconds = convertTimeToSeconds(hoursText, minutesText, secondsText)
       
-      saveBookmarkToFirebase(url: url)
+      saveBookmarkToFirebase(url: url, note: note)
     }
   }
   
-  func validateTimeInput(_ hours: String, _ minutes: String, _ seconds: String) -> Bool {
-    if let hoursValue = Int(hours), let minutesValue = Int(minutes), let secondsValue = Int(seconds),
-       hoursValue >= 0, minutesValue >= 0, secondsValue >= 0 {
-      return true
+  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+      if textField == notesTextField {
+        // Calculate the new text length after the user's input
+        let currentText = textField.text ?? ""
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        
+        // Check if the new text length exceeds 50 characters
+        if newText.count > 50 {
+          // Show an alert indicating that the text exceeds the limit
+          showAlert(title: "Error", message: "Notes cannot exceed 50 characters.")
+          return false // Prevent further input
+        }
+      }
+      return true // Allow the input
     }
-    // Handle invalid input (show an alert, error message, etc.)
-    return false
+  
+  func validateTimeInput(_ hours: String, _ minutes: String, _ seconds: String) -> Bool {
+      guard !hours.isEmpty, !minutes.isEmpty, !seconds.isEmpty else {
+          showAlert(title: "Error", message: "All time fields must be filled.")
+          return false
+      }
+
+      if let hoursValue = Int(hours), let minutesValue = Int(minutes), let secondsValue = Int(seconds),
+         hoursValue >= 0, minutesValue >= 0, secondsValue >= 0 {
+          return true
+      } else {
+          showAlert(title: "Error", message: "Hours, minutes, and seconds must be valid numbers.")
+          return false
+      }
   }
+
   
   
   func convertTimeToSeconds(_ hours: String, _ minutes: String, _ seconds: String) -> Int {
@@ -150,7 +231,7 @@ class ShareViewController: UIViewController {
     extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
   }
   
-  private func saveBookmarkToFirebase(url: URL) {
+  private func saveBookmarkToFirebase(url: URL, note: String) {
     guard let userDefaults = UserDefaults(suiteName: "group.com.holygrail.bookmark"),
           let userID = userDefaults.string(forKey: "userID") else {
       print("UserID not found in UserDefaults")
@@ -165,7 +246,7 @@ class ShareViewController: UIViewController {
       guard let self = self else { return }
       
       if allowed {
-        self.proceedWithSavingBookmark(url: url, userID: userID)
+        self.proceedWithSavingBookmark(url: url, userID: userID, note: note)
       } else {
         self.showAlert(title: "Limit Reached",
                        message: "You already have 10 bookmarks saved. Please delete old bookmarks to save new ones.")
@@ -187,7 +268,7 @@ class ShareViewController: UIViewController {
     }
   }
   
-  private func proceedWithSavingBookmark(url: URL, userID: String) {
+  private func proceedWithSavingBookmark(url: URL, userID: String, note: String) {
     let videoID = extractYoutubeVideoID(from: url)
     
     fetchYoutubeVideoDetails(videoID: videoID) { [weak self] result in
@@ -209,6 +290,7 @@ class ShareViewController: UIViewController {
           "title": video.title,
           "url": url.absoluteString,
           "userID": userID,
+          "note": note
         ]
         self.saveToFirebase(data: bookmarkData) { success, errorMessage in
           DispatchQueue.main.async {
